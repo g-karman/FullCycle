@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+
+  app:
+    container_name: app
+    hostname: app
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 50s docker-entrypoint.sh
+    command: npm start
+    build:
+      context: ./node
+    networks:
+      - nodenet
+    volumes:
+      - ./node:/usr/src/app
+    tty: true  
+    ports:
+      - "3000:3000"   
+    depends_on:
+      - db   
+      
+  nginx:  
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.prod  
+    image: gukarman/fc_nginx:prod
+    container_name: nginx
+    networks:
+      - nodenet
+    ports:
+      - "8080:80"
+    depends_on:
+      - app  
+
+  db:
+    image: mysql:5.7
+    command: --innodb-use-native-aio=0
+    container_name: db
+    restart: always
+    tty: true
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment: 
+      - MYSQL_DATABASE=fullcycle
+      - MYSQL_ROOT_PASSWORD=root
+      
+    networks:
+      - nodenet    
+        
+networks:
+  nodenet:
+    driver: bridge     
