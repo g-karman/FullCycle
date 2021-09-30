@@ -11,8 +11,7 @@ services:
       context: ./node
     networks:
       - nodenet
-    volumes:
-      - ./node:/usr/src/app
+    
     tty: true  
     ports:
       - "3000:3000"   

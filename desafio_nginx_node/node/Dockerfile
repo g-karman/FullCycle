@@ -2,6 +2,7 @@ FROM node:15
 
 WORKDIR /usr/src/app
 
+RUN npm install -g express-generator && npx express --view=ejs
 COPY . .
 RUN npm install
 
