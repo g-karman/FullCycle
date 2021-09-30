@@ -1,4 +1,4 @@
 # FullCycle
  Desafios FullCycle
 
-imagem golang: gukarman/fc_golang
+imagem golang: docker run gukarman/fc_golang
